@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<DialogPane fx:id="dialogPane" headerText="                            Put informations here ↓↓↓" minHeight="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: rgb(212, 224, 228);" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.todo.DialogController">
+    <padding>
+        <Insets top="5.0" />
+    </padding>
+    <buttonTypes>
+        <ButtonType fx:constant="CANCEL" />
+        <ButtonType fx:constant="OK" />
+    </buttonTypes>
+    <content>
+        <VBox prefHeight="331.0" prefWidth="630.0">
+            <GridPane hgap="10" prefHeight="398.0" prefWidth="600.0" style="-fx-background-color: #3d778f;" vgap="10" VBox.vgrow="ALWAYS">
+                <Label alignment="CENTER" text="  Description: " textFill="WHITE" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                   <font>
+                      <Font name="Calibri Bold Italic" size="14.0" />
+                   </font>
+                </Label>
+                <TextField fx:id="titleField" prefHeight="26.0" prefWidth="443.0" promptText="Hint" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                   <font>
+                      <Font name="Cambria" size="14.0" />
+                   </font>
+                </TextField>
+                <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="18.0" prefWidth="71.0" text="  Details: " textFill="WHITE" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                   <font>
+                      <Font name="Calibri Bold Italic" size="14.0" />
+                   </font>
+                </Label>
+                <TextArea fx:id="noteField" prefHeight="103.0" prefWidth="474.0" promptText="Enter any not here !" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                   <font>
+                      <Font name="Cambria" size="14.0" />
+                   </font>
+                </TextArea>
+                <Label alignment="CENTER" prefHeight="18.0" prefWidth="72.0" text="  Deadline:" textFill="WHITE" GridPane.columnIndex="0" GridPane.rowIndex="2">
+                   <font>
+                      <Font name="Calibri Bold Italic" size="14.0" />
+                   </font>
+                </Label>
+<!--                <DatePicker fx:id="deadLineField" prefHeight="26.0" prefWidth="168.0" promptText="Optinal Due " style="-fx-background-color: rgb(73, 35, 49);" GridPane.columnIndex="1" GridPane.rowIndex="2" />-->
+                <columnConstraints>
+                    <ColumnConstraints />
+                    <ColumnConstraints maxWidth="467.40000000000003" minWidth="467.40000000000003" prefWidth="467.40000000000003" />
+                    <ColumnConstraints maxWidth="0.0" minWidth="0.0" prefWidth="0.0" />
+                </columnConstraints>
+                <rowConstraints>
+                    <RowConstraints percentHeight="15" />
+                    <RowConstraints percentHeight="55" />
+                    <RowConstraints percentHeight="30" />
+                </rowConstraints>
+            </GridPane>
+        </VBox>
+    </content>
+</DialogPane>
