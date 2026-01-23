@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class DataBaseConnection {
 
     private static String dbURL = "jdbc:mysql://localhost:3306/todo";
-    private static String user = "username";
+    private static String user = "user";
     private static Connection connection;
     private static PreparedStatement preparedStatement;
     private static Statement statement;
