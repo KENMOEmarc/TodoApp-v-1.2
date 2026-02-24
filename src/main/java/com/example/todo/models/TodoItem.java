@@ -2,15 +2,14 @@ package com.example.todo.models;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class TodoItem implements Serializable {
 
-    private String id;
+    private final String id;
     private String title;
     private String note;
-    private LocalDate createdAt;
+    private final LocalDate createdAt;
 
     public TodoItem(String title, String note){
         this.title = title;
@@ -24,13 +23,6 @@ public class TodoItem implements Serializable {
         this.title = title;
         this.note = note;
         this.createdAt = createdAt;
-    }
-
-    public TodoItem() {
-        this.title = "UrusNoire";
-        this.note = "Ghini-ghini Lambo";
-        this.id = UUID.randomUUID().toString();
-        this.createdAt = LocalDate.now();
     }
 
     public LocalDate getCreatedAt() {

@@ -7,7 +7,6 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.*;
 import javafx.scene.layout.*;
@@ -23,10 +22,6 @@ import java.util.ResourceBundle;
 public class HelloController implements Initializable, Closeable {
 
     private static final TodoManager manager = new TodoManager();
-    @FXML
-    private Button exitButton;
-    @FXML
-    private Button addItemButton;
     @FXML
     private VBox container = new VBox(10);
 
@@ -51,9 +46,8 @@ public class HelloController implements Initializable, Closeable {
             dialog.setDialogPane(dialogPane);
             dialog.setTitle("//♣UrusNoire♠||◙");
             Optional<ButtonType> result = dialog.showAndWait();
-            ButtonType buttonTypeValue = result.get();
 
-            if (buttonTypeValue == ButtonType.OK) {
+            if (result.isPresent() && result.get() == ButtonType.OK) {
                dialogController.addProcess();
                refreshTodoList();
             }
@@ -71,9 +65,7 @@ public class HelloController implements Initializable, Closeable {
         ContextMenu menu = new ContextMenu();
         MenuItem edit = new MenuItem("Edit");
 
-        edit.setOnAction(event -> {
-            updateTodoItem(todoItem);
-        });
+        edit.setOnAction(event -> updateTodoItem(todoItem));
 
         menu.getItems().add(edit);
         textArea.setOnMouseClicked(event -> {
@@ -84,7 +76,7 @@ public class HelloController implements Initializable, Closeable {
 
         textArea.setText(todoItem.toString());
         hBox.setPadding(new Insets(5));
-        String todoItemId = todoItem.getId().toString();
+        String todoItemId = todoItem.getId();
 
         hBox.setId(todoItemId);
         hBox.setMinWidth(500.0);
@@ -99,7 +91,6 @@ public class HelloController implements Initializable, Closeable {
                 throw new RuntimeException(e);
             }
         } );
-//        System.out.println(todoItem);
         return hBox;
     }
 
@@ -122,12 +113,14 @@ public class HelloController implements Initializable, Closeable {
         Button removeButton = new Button();
         removeButton.setPrefHeight(100.0);
         removeButton.setPrefWidth(50.0);
-        Image removeIcon = new Image(getClass().getResourceAsStream("/trash-25.png"));
-        ImageView iconView = new ImageView(removeIcon);
-        iconView.setFitHeight(30);
-        iconView.setFitWidth(30);
-
-        removeButton.setGraphic(iconView);
+        java.io.InputStream resourceStream = getClass().getResourceAsStream("/trash-25.png");
+        if (resourceStream != null) {
+            Image removeIcon = new Image(resourceStream);
+            ImageView iconView = new ImageView(removeIcon);
+            iconView.setFitHeight(30);
+            iconView.setFitWidth(30);
+            removeButton.setGraphic(iconView);
+        }
         removeButton.setAlignment(Pos.CENTER);
         removeButton.setBackground(new Background(new BackgroundFill(Color.web("rgb(176, 1, 3)"), null, null)));
         removeButton.setCursor(Cursor.cursor("Hand"));
@@ -176,12 +169,11 @@ public class HelloController implements Initializable, Closeable {
             dialog.setDialogPane(dialogPane);
             dialog.setTitle("//♣UrusNoire♠||◙");
             Optional<ButtonType> result = dialog.showAndWait();
-            ButtonType buttonTypeValue = result.get();
 
-            String note = dialogController.getNoteField().getText();
-            String title = dialogController.getTitleField().getText();
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                String note = dialogController.getNoteField().getText();
+                String title = dialogController.getTitleField().getText();
 
-            if (buttonTypeValue == ButtonType.OK) {
                 if ( note.isEmpty() && title.isEmpty() ){
                     JOptionPane.showMessageDialog(null, "You can't save an empty item!");
                 }else {
@@ -195,10 +187,6 @@ public class HelloController implements Initializable, Closeable {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    private void loadDialogPane(){
-
     }
 
     @FXML
@@ -215,7 +203,7 @@ public class HelloController implements Initializable, Closeable {
     }
 
     @Override
-    public void close() throws IOException {
+    public void close() {
         System.exit(1);
     }
 }

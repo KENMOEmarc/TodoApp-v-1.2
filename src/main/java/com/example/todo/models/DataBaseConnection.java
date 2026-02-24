@@ -9,20 +9,18 @@ import java.util.ArrayList;
 
 public class DataBaseConnection {
 
-    private static String dbURL = "jdbc:mysql://localhost:3306/todo";
-    private static String user = "user";
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/todo";
+    private static final String USER = "user";
     private static Connection connection;
     private static PreparedStatement preparedStatement;
-    private static Statement statement;
-    private static ResultSet resultSet;
 
     private static void connection() {
         try {
-            connection = DriverManager.getConnection(dbURL, user, "password");
-            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Connexion Established !");
+            connection = DriverManager.getConnection(DB_URL, USER, "password");
+            new Alert(Alert.AlertType.INFORMATION, "Connexion Established !").show();
         } catch (SQLException e) {
-            e.printStackTrace();
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Connection Failed!", ButtonType.OK);
+            System.err.println("Database connection error: " + e.getMessage());
+            new Alert(Alert.AlertType.ERROR, "Connection Failed!", ButtonType.OK).show();
         }
     }
 
@@ -37,8 +35,6 @@ public class DataBaseConnection {
                 preparedStatement.setString(1, todoItem.getId());
                 preparedStatement.setString(2, todoItem.getTitle());
                 preparedStatement.setString(3, todoItem.getNote());
-
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
                 preparedStatement.setDate(4, Date.valueOf(todoItem.getCreatedAt()));
                 preparedStatement.executeUpdate();
 
@@ -85,14 +81,14 @@ public class DataBaseConnection {
     }
 
     public ArrayList<TodoItem> fetchAll(){
-        ArrayList<TodoItem> todoItems = new ArrayList<TodoItem>();
+        ArrayList<TodoItem> todoItems = new ArrayList<>();
         String sql = "SELECT * FROM todoitem ";
 
         try {
             connection();
             if (connection != null) {
-                statement = connection.createStatement();
-                resultSet = statement.executeQuery(sql);/* Envoyer le resultet au repositery*/
+                Statement statement = connection.createStatement();
+                ResultSet resultSet = statement.executeQuery(sql);
 
                 while (resultSet.next()){
                     todoItems.add(new TodoItem(resultSet.getString("id"), resultSet.getString("title"),

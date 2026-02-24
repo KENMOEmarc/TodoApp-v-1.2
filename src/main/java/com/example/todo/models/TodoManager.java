@@ -1,21 +1,19 @@
 package com.example.todo.models;
 
-import com.example.todo.HelloController;
 import com.example.todo.contracts.IFileService;
 import com.example.todo.contracts.ITodoManager;
 import javafx.fxml.FXML;
 import javax.swing.*;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 
 public class
 TodoManager implements ITodoManager, IFileService {
     private ArrayList<TodoItem> todoList ;
-    private DataBaseConnection dataBase;
+    private final DataBaseConnection dataBase;
 
     public TodoManager() {
-        todoList = new ArrayList<TodoItem>();
+        todoList = new ArrayList<>();
         dataBase = new DataBaseConnection();
     }
 
