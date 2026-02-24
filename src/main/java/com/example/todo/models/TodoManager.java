@@ -18,7 +18,7 @@ TodoManager implements ITodoManager, IFileService {
     }
 
     public void sortTodoList() {
-        todoList.sort((item1, item2) -> item1.getCreatedAt().compareTo(item2.getCreatedAt()));
+        todoList.sort(Comparator.comparing(TodoItem::getCreatedAt));
     }
 
     @Override

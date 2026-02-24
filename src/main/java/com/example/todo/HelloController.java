@@ -83,15 +83,17 @@ public class HelloController implements Initializable, Closeable {
         hBox.setMinHeight(68.0);
         hBox.setVisible(true);
 
-        removeButton.setOnAction(event -> {
-            manager.removeTodoItem(todoItemId);
-            try {
-                refreshTodoList();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        } );
+        removeButton.setOnAction(event -> onRemoveTodoItem(todoItemId));
         return hBox;
+    }
+
+    private void onRemoveTodoItem(String todoItemId) {
+        manager.removeTodoItem(todoItemId);
+        try {
+            refreshTodoList();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @FXML

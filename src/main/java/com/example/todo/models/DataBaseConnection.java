@@ -4,19 +4,24 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javax.swing.*;
 import java.sql.*;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class DataBaseConnection {
 
     private static final String DB_URL = "jdbc:mysql://localhost:3306/todo";
     private static final String USER = "user";
-    private static Connection connection;
-    private static PreparedStatement preparedStatement;
+    private static final String PASSWORD = "password";
 
-    private static void connection() {
+    private Connection connection;
+    private PreparedStatement preparedStatement;
+
+    public DataBaseConnection() {
+        // Connection is established on-demand per operation
+    }
+
+    private void establishConnection() {
         try {
-            connection = DriverManager.getConnection(DB_URL, USER, "password");
+            connection = DriverManager.getConnection(DB_URL, USER, PASSWORD);
             new Alert(Alert.AlertType.INFORMATION, "Connexion Established !").show();
         } catch (SQLException e) {
             System.err.println("Database connection error: " + e.getMessage());
@@ -27,7 +32,7 @@ public class DataBaseConnection {
     public void insertTodo(TodoItem todoItem) {
         String sql = "INSERT INTO todoitem VALUES (?, ?, ?, ?)";
         try {
-           connection();
+           establishConnection();
 
             if (connection != null) {
                 preparedStatement = connection.prepareStatement(sql);
@@ -41,15 +46,16 @@ public class DataBaseConnection {
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            closeConnection();
         }
-        closeConnection();
     }
 
 
     public void updateTodo(TodoItem todoItem) {
         String sql = "UPDATE todoitem SET title = ?, note = ? WHERE id = ?";
         try {
-            connection();
+            establishConnection();
 
             if (connection != null) {
                 preparedStatement = connection.prepareStatement(sql);
@@ -60,15 +66,16 @@ public class DataBaseConnection {
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            closeConnection();
         }
-        closeConnection();
     }
 
 
     public void deleteTodo(String todoItemId) {
         String sql = "DELETE FROM todoitem WHERE id = ?";
         try {
-            connection();
+            establishConnection();
             if (connection != null) {
                 preparedStatement = connection.prepareStatement(sql);
                 preparedStatement.setString(1, todoItemId);
@@ -76,8 +83,9 @@ public class DataBaseConnection {
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            closeConnection();
         }
-        closeConnection();
     }
 
     public ArrayList<TodoItem> fetchAll(){
@@ -85,7 +93,7 @@ public class DataBaseConnection {
         String sql = "SELECT * FROM todoitem ";
 
         try {
-            connection();
+            establishConnection();
             if (connection != null) {
                 Statement statement = connection.createStatement();
                 ResultSet resultSet = statement.executeQuery(sql);
@@ -97,17 +105,18 @@ public class DataBaseConnection {
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            closeConnection();
         }
 
-        closeConnection();
         return todoItems;
     }
 
-    public void closeConnection() {
+    private void closeConnection() {
         if (connection != null) {
             try {
-                connection.close(); // Assuming DataBaseConnection has a close method
-            } catch (Exception e) {
+                connection.close();
+            } catch (SQLException e) {
                 JOptionPane.showMessageDialog(null, "Error closing the database connection: " + e.getMessage());
             }
         }
